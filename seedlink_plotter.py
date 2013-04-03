@@ -50,6 +50,12 @@ class Seedlink_plotter(SLClient):
             # Regular colors
             self.color = ('#000000', '#ff0000', '#0000ff', '#56a83c')
 
+        # Event parameters
+        if args.events is None:
+            self.events = []
+        else:
+            self.events = {"min_magnitude": args.events}
+
         # converter for the colors gradient
     def rgb_to_hex(self, r, g, b):
         return '#%02X%02X%02X' % (r, g, b)
@@ -90,7 +96,8 @@ class Seedlink_plotter(SLClient):
             one_tick_per_line=True,
             # noir  Rouge bleu vert
             color = self.color,
-            show_y_UTC_label=False)
+            show_y_UTC_label=False,
+            events=self.events)
 
     def packetHandler(self, count, slpack):
         """
@@ -207,6 +214,8 @@ if __name__ == '__main__':
         '--rainbow', help='', required=False, action='store_true')
     parser.add_argument(
         '--nb_rainbow_colors', help='numbers of colors for rainbow mode', required=False, default=10)
+    parser.add_argument(
+        '--events', help='plot events using obspy.neries, specify minimum magnitude', required=False, default=None, type=float)
 
     # parse the arguments
     args = parser.parse_args()
